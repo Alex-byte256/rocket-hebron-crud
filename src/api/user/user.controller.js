@@ -14,8 +14,8 @@ module.exports = {
     createUser: async (req, res) => {
         try {
             console.log(req.body);
-            let el = await  fs.readFile(dataBaseFile)
-            let newUs = JSON.parse(el);
+            let allUs = await  fs.readFile(dataBaseFile)
+            let newUs = JSON.parse(allUs);
             newUs.push(req.body)
             await fs.writeFile(dataBaseFile,JSON.stringify(newUs))
             res.status(201).json('user created');
@@ -43,8 +43,8 @@ module.exports = {
                 throw new Error("no user with this id")
                 return;
             }
-            let el = await  fs.readFile(dataBaseFile);
-            let updUs = JSON.parse(el);
+            let allUs = await  fs.readFile(dataBaseFile);
+            let updUs = JSON.parse(allUs);
             updUs.splice(id,1,req.body)
             await fs.writeFile(dataBaseFile,JSON.stringify(updUs))
             res.json('update user');
@@ -63,8 +63,8 @@ module.exports = {
                 throw new Error("no user with this id")
                 return;
             }
-            let el = await  fs.readFile(dataBaseFile);
-            let delUs = JSON.parse(el);
+            let allUs = await  fs.readFile(dataBaseFile);
+            let delUs = JSON.parse(allUs);
             delUs.splice(id,1)
             await fs.writeFile(dataBaseFile,JSON.stringify(delUs))
             res.json('delete user');
