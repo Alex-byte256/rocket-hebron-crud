@@ -18,7 +18,7 @@ module.exports = {
             let newUs = JSON.parse(el);
             newUs.push(req.body)
             await fs.writeFile(dataBaseFile,JSON.stringify(newUs))
-            res.status(201).json('HELLO TEST CHAT');
+            res.status(201).json('user created');
         } catch (e) {
             res.status(400).json(e.message);
         }
@@ -36,16 +36,44 @@ module.exports = {
         }
     },
 
-    updateUser: (req, res) => {
-        console.log(req.body);
-        console.log(req.params.userId);
+    updateUser: async (req, res) => {
+        try {
+            const id = req.params.userId - 1;
+            if(users[req.params.userId - 1] === undefined){
+                throw new Error("no user with this id")
+                return;
+            }
+            let el = await  fs.readFile(dataBaseFile);
+            let updUs = JSON.parse(el);
+            updUs.splice(id,1,req.body)
+            await fs.writeFile(dataBaseFile,JSON.stringify(updUs))
+            res.json('update user');
+        }catch (e) {
+            console.log(e);
+        }
 
-        res.json('HELLO TEST CHAT');
+
     },
 
-    deleteUser: (req, res) => {
-        console.log(req.params.userId);
+    deleteUser: async (req, res) => {
+        try {
+            console.log(req.params.userId);
+            const id = req.params.userId - 1;
+            if(users[req.params.userId - 1] === undefined){
+                throw new Error("no user with this id")
+                return;
+            }
+            let el = await  fs.readFile(dataBaseFile);
+            let delUs = JSON.parse(el);
+            delUs.splice(id,1)
+            await fs.writeFile(dataBaseFile,JSON.stringify(delUs))
+            res.json('delete user');
+            res.status(204).json('User was deleted');
+        }catch (e){
+            console.log(e);
+        }
 
-        res.status(204).json('User was deleted');
+
+
     }
 }
